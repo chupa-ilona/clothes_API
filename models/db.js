@@ -1,13 +1,27 @@
 const mysql = require('mysql2/promise');
-const config = require('../config/db.config');
 
-async function query(sql, params) {
-    const connection = await mysql.createConnection(config.db);
-    const [results] = await connection.execute(sql, params);
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'ilonailona',
+    database: 'Clothes_API',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
-    return results;
-}
+pool.getConnection()
+    .then(() => console.log('Успішне підключення до бази даних'))
+    .catch(err => console.error('Помилка підключення до бази даних:', err));
 
 module.exports = {
-    query,
+    query: async (sql, params) => {
+        try {
+            const [rows] = await pool.execute(sql, params);
+            return rows;
+        } catch (error) {
+            console.error('Database query error:', error);
+            throw error;
+        }
+    }
 };

@@ -7,7 +7,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -23,17 +22,67 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const swaggerOptions = {
     swaggerDefinition: {
+        openapi: '3.0.0',
         info: {
             version: '1.0.0',
-            title: 'Express Application',
-            description: 'Express Application API Documentation'
+            title: 'Clothing Inventory API',
+            description: 'API Documentation for Clothing Inventory Management Service'
         },
-        schemes: ['http'],
-        consumes: ['application/json'],
-        produces: ['application/json']
+        servers: [
+            {
+                url: 'http://localhost:3000',
+                description: 'Local server'
+            }
+        ],
+        components: {
+            schemas: {
+                Category: {
+                    type: 'object',
+                    properties: {
+                        category_id: { type: 'integer' },
+                        name: { type: 'string' }
+                    }
+                },
+                Size: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'string' },
+                        description: { type: 'string' }
+                    }
+                },
+                Product: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer' },
+                        name: { type: 'string' },
+                        category_id: { type: 'integer' },
+                        price: { type: 'number' }
+                    }
+                },
+                Inventory: {
+                    type: 'object',
+                    properties: {
+                        inventory_id: { type: 'integer' },
+                        product_id: { type: 'integer' },
+                        size_id: { type: 'string' },
+                        quantity: { type: 'integer' }
+                    }
+                },
+                User: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer' },
+                        username: { type: 'string' },
+                        password: { type: 'string' },
+                        role: { type: 'string', enum: ['admin', 'worker'] },
+                        created_at: { type: 'string', format: 'date-time' }
+                    }
+                }
+            }
+        }
     },
     apis: [
-        './models/*.js',
+        './routes/*.js',
         './controllers/*.js'
     ]
 };
@@ -48,7 +97,6 @@ app.get('/api-docs.json', (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -65,6 +113,11 @@ app.use((err, req, res, next) => {
     // render the error page
     res.status(err.status || 500);
     res.render('error');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;
