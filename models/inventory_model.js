@@ -11,15 +11,19 @@ const Inventory = function (inventory) {
 
 Inventory.getAll = async (where = {}) => {
     try {
-        const query = `SELECT * FROM Inventory${Object.keys(where).length ? ' WHERE inventory_id = ?' : ''}`;
-        const params = Object.keys(where).length ? [where.inventory_id] : [];
-        console.log('Executing query:', query, 'with params:', params); // Діагностика
-        const [rows] = await db.query(query, params); // Деструктуризація для правильного повернення
-        console.log('Query result:', rows); // Діагностика
+        let query = 'SELECT * FROM Inventory';
+        const params = [];
+        if (where.inventory_id) {
+            query += ' WHERE inventory_id = ?';
+            params.push(where.inventory_id);
+        }
+        console.log('Executing query:', query, 'with params:', params);
+        const rows = await db.query(query, params);
+        console.log('Query result:', rows);
         return rows;
     } catch (error) {
         console.error('Error in Inventory.getAll:', error);
-        throw error; // Пропускаємо помилку далі для обробки контролером
+        throw error;
     }
 };
 

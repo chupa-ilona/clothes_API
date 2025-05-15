@@ -26,13 +26,13 @@ const swaggerOptions = {
         info: {
             version: '1.0.0',
             title: 'Clothing Inventory API',
-            description: 'API Documentation for Clothing Inventory Management Service'
+            description: 'API Documentation for Clothing Inventory Management Service',
         },
         servers: [
             {
                 url: 'http://localhost:3000',
-                description: 'Local server'
-            }
+                description: 'Local server',
+            },
         ],
         components: {
             schemas: {
@@ -40,15 +40,15 @@ const swaggerOptions = {
                     type: 'object',
                     properties: {
                         category_id: { type: 'integer' },
-                        name: { type: 'string' }
-                    }
+                        name: { type: 'string' },
+                    },
                 },
                 Size: {
                     type: 'object',
                     properties: {
                         id: { type: 'string' },
-                        description: { type: 'string' }
-                    }
+                        description: { type: 'string' },
+                    },
                 },
                 Product: {
                     type: 'object',
@@ -56,8 +56,8 @@ const swaggerOptions = {
                         id: { type: 'integer' },
                         name: { type: 'string' },
                         category_id: { type: 'integer' },
-                        price: { type: 'number' }
-                    }
+                        price: { type: 'number' },
+                    },
                 },
                 Inventory: {
                     type: 'object',
@@ -65,8 +65,8 @@ const swaggerOptions = {
                         inventory_id: { type: 'integer' },
                         product_id: { type: 'integer' },
                         size_id: { type: 'string' },
-                        quantity: { type: 'integer' }
-                    }
+                        quantity: { type: 'integer' },
+                    },
                 },
                 User: {
                     type: 'object',
@@ -75,16 +75,13 @@ const swaggerOptions = {
                         username: { type: 'string' },
                         password: { type: 'string' },
                         role: { type: 'string', enum: ['admin', 'worker'] },
-                        created_at: { type: 'string', format: 'date-time' }
-                    }
-                }
-            }
-        }
+                        created_at: { type: 'string', format: 'date-time' },
+                    },
+                },
+            },
+        },
     },
-    apis: [
-        './routes/*.js',
-        './controllers/*.js'
-    ]
+    apis: ['./routes/*.js', './controllers/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -117,7 +114,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log('Server is running on port http://localhost:3000 ');
 });
 
 module.exports = app;
