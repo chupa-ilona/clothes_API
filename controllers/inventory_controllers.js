@@ -1,9 +1,5 @@
-// controllers/inventory_controllers.js
-
 const { body, param } = require('express-validator');
-
 const Inventory = require('../models/inventory_model');
-
 const handleValidationErrors = require('../middleware/validationErrors');
 
 exports.validateCreateInventory = [
@@ -46,6 +42,7 @@ exports.validateDeleteInventory = [
 
 exports.getInventory = async (req, res) => {
     try {
+        console.log('Request query params:', req.query);
         const data = await Inventory.getAll();
         res.status(200).json(data);
     } catch (error) {
@@ -79,9 +76,7 @@ exports.updateInventory = async (req, res) => {
     const { product_id: productId, size_id: sizeId, quantity } = req.body;
     try {
         const result = await Inventory.update(id, { product_id: productId, size_id: sizeId, quantity });
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Запис не знайдено' });
-        }
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Запис не знайдено' });
         return res.status(200).json({ message: 'Запис оновлено', id, product_id: productId, size_id: sizeId, quantity });
     } catch (error) {
         return res.status(500).json({ error: 'Помилка при оновленні запису', details: error.message });
