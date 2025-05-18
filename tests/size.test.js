@@ -21,11 +21,6 @@ describe('Size Controller CRUD Tests', () => {
     jest.clearAllMocks();
   });
 
-  // Після кожного тесту очищуємо моки
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   // Після всіх тестів закриваємо з'єднання з базою даних
   afterAll(async () => {
     // Перевіряємо чи є метод close або end у db

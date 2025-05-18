@@ -19,10 +19,6 @@ describe('User Controller CRUD Tests', () => {
     jest.clearAllMocks();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   afterAll(async () => {
     
     if (db.close && typeof db.close === 'function') {

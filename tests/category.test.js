@@ -21,11 +21,6 @@ describe('Category Controller CRUD Tests', () => {
     jest.clearAllMocks();
   });
 
-  // Після кожного тесту очищуємо моки
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   // Після всіх тестів закриваємо з'єднання з базою даних
   afterAll(async () => {
     // Перевіряємо чи є метод close або end у db
@@ -47,10 +42,10 @@ describe('Category Controller CRUD Tests', () => {
     };
     req.body = categoryData;
     Category.create.mockResolvedValue({ insertId: 1 });
-
+    
     // Виконання
     await categoryController.createCategory(req, res);
-
+    
     // Перевірка
     expect(Category.create).toHaveBeenCalledWith(categoryData);
     expect(res.status).toHaveBeenCalledWith(201);
@@ -67,10 +62,10 @@ describe('Category Controller CRUD Tests', () => {
     const category = { category_id: categoryId, name: 'Тестова категорія' };
     req.params.id = categoryId;
     Category.getAll.mockResolvedValue([category]);
-
+    
     // Виконання
     await categoryController.getCategoryById(req, res);
-
+    
     // Перевірка
     expect(Category.getAll).toHaveBeenCalledWith({ id: categoryId });
     expect(res.status).toHaveBeenCalledWith(200);
@@ -87,10 +82,10 @@ describe('Category Controller CRUD Tests', () => {
     req.params.id = categoryId;
     req.body = categoryData;
     Category.update.mockResolvedValue({ affectedRows: 1 });
-
+    
     // Виконання
     await categoryController.updateCategory(req, res);
-
+    
     // Перевірка
     expect(Category.update).toHaveBeenCalledWith(categoryId, categoryData);
     expect(res.status).toHaveBeenCalledWith(200);
@@ -107,10 +102,10 @@ describe('Category Controller CRUD Tests', () => {
     const categoryId = 1;
     req.params.id = categoryId;
     Category.delete.mockResolvedValue({ affectedRows: 1 });
-
+    
     // Виконання
     await categoryController.deleteCategory(req, res);
-
+    
     // Перевірка
     expect(Category.delete).toHaveBeenCalledWith(categoryId);
     expect(res.status).toHaveBeenCalledWith(200);
