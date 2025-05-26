@@ -1,7 +1,6 @@
 const db = require('./db');
 
-// constructor
-// eslint-disable-next-line func-names
+
 const Products = function (product) {
     this.id = product.id;
     this.name = product.name;
@@ -10,8 +9,35 @@ const Products = function (product) {
 };
 
 Products.getAll = async (where = {}) => {
-    const query = `SELECT * FROM Products${  Object.keys(where).length ? ' WHERE id = ?' : ''}`;
-    const params = Object.keys(where).length ? [where.id] : [];
+    let query = 'SELECT * FROM Products';
+    const params = [];
+
+    const conditions = [];
+    if (where.id) {
+        conditions.push('id = ?');
+        params.push(where.id);
+    }
+    if (where.name) {
+        conditions.push('name LIKE ?');
+        params.push(where.name);
+    }
+    if (where.category_id) {
+        conditions.push('category_id = ?');
+        params.push(where.category_id);
+    }
+    if (where.min_price) {
+        conditions.push('price >= ?');
+        params.push(where.min_price);
+    }
+    if (where.max_price) {
+        conditions.push('price <= ?');
+        params.push(where.max_price);
+    }
+
+    if (conditions.length) {
+        query += ` WHERE ${  conditions.join(' AND ')}`;
+    }
+
     const rows = await db.query(query, params);
     return rows;
 };
