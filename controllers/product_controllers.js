@@ -1,4 +1,3 @@
-
 const { body, param } = require('express-validator');
 
 const Products = require('../models/product_model');
@@ -56,7 +55,15 @@ exports.validateDeleteProduct = [
 
 exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Products.getAll();
+        const { name, category_id: categoryId, min_price: minPrice, max_price: maxPrice } = req.query;
+        const filters = {};
+
+        if (name) filters.name = `%${name}%`; // Пошук за назвою (LIKE)
+        if (categoryId) filters.category_id = parseInt(categoryId, 10);
+        if (minPrice) filters.min_price = parseFloat(minPrice);
+        if (maxPrice) filters.max_price = parseFloat(maxPrice);
+
+        const products = await Products.getAll(filters);
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ error: 'Помилка при отриманні продуктів', details: error.message });
